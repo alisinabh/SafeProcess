@@ -6,7 +6,9 @@ A simple .Net process supervisor for windows applications.
 
 It can help you with restarting a process when it crashes and monitoring the exit code!
 
-## Configuration
+## Configuration and running
+
+Build the project or download Pre-built binaries from here: [Releases](https://github.com/alisinabh/SafeProcess/releases)
 
 Just copy SafeProcess.exe and make a file named `safeprocess.conf` beside it.
 
