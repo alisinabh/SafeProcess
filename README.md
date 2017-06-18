@@ -36,7 +36,7 @@ SafeProcess will log all events in a directory beside safeprocess.exe named `Saf
 
 **Important: This application will not function correctly if you don't Follow this step.**
 
-Make sure that `Prevent display of user interface for critical errors` from Group policies` is **Enabled**.
+Make sure that `Prevent display of user interface for critical errors` from Group policies is **Enabled**.
 
 You can enable it by running `gpedit.msc` the go to `Computer Configuration > Administrative Templates > Windows Components > Windows Error Reporting`
 Then you can double click on ``Prevent display of...``, Enable the option then click OK.
