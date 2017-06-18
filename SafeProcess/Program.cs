@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,11 +11,11 @@ namespace SafeProcess
 {
     class Program
     {
-        public const string ConfigFileName = "safeprocess.conf";
+        private const string ConfigFileName = "safeprocess.conf";
 
         private readonly List<SafeProcessInfo> _processes = new List<SafeProcessInfo>();
 
-        public Program()
+        private Program()
         {
             if (!File.Exists(ConfigFileName))
             {
@@ -27,6 +26,10 @@ namespace SafeProcess
             ReadFile(ConfigFileName);
         }
 
+        /// <summary>
+        /// Reads the config file data and adds it to _processes object
+        /// </summary>
+        /// <param name="configFileName">configurations file name</param>
         private void ReadFile(string configFileName)
         {
             Console.WriteLine("Reading configuration");
@@ -64,6 +67,10 @@ namespace SafeProcess
 
         }
 
+        /// <summary>
+        /// Starts monitoring the process in thread
+        /// </summary>
+        /// <param name="procObj">Process object</param>
         private void MonitorProcess(object procObj)
         {
             var proc = (SafeProcessInfo) procObj;
@@ -128,47 +135,5 @@ namespace SafeProcess
         }
 
         static void Main(string[] args) => new Program();
-    }
-
-    public class SafeProcessInfo
-    {
-        public string ProcessName { get; set; }
-
-        public string ExecutablePath { get; set; }
-
-        public List<DateTime> CrashTimes { get; } = new List<DateTime>();
-
-        private const string LogDirName = "SafeProcessLogs/";
-
-        public void Crashed(int exitCode)
-        {
-            var crashDate = DateTime.Now;
-            CrashTimes.Add(crashDate);
-
-            try
-            {
-                Console.WriteLine($"Process {ProcessName} has crashed at {crashDate} for {CrashTimes.Count} time!");
-
-                if (!Directory.Exists(LogDirName))
-                    Directory.CreateDirectory(LogDirName);
-
-                string fileName =
-                    (long)crashDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + ".log";
-
-                StreamWriter sw = new StreamWriter(Path.Combine(LogDirName, ProcessName + fileName));
-
-                sw.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture));
-                sw.WriteLine($"Process {ProcessName} crashed with exit code: {exitCode}");
-
-                sw.Flush();
-
-                sw.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Log crash exception:");
-                Console.WriteLine(ex);
-            }
-        }
     }
 }
